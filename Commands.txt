@@ -5,7 +5,7 @@
 4. git remote add origin https://github.com/Vamsi-767/Property-Management.git
 5. git remote set -url origin https://Vamsi-767:TOKEN
 6. git push --set upstream origin master
-
+===================================================
 Next time onwards
 1. git pull
 2. git add .
