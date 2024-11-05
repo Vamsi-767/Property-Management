@@ -17,6 +17,8 @@ import java.util.Optional;
 public class PropertyServiceImpl implements PropertyService {
     @Value("$ {spring.datasource.url}")
     private String Dummy;
+    @Value("${spring.datasource.driverClassName}")
+    private String DriverName;
     @Autowired
     private PropertyRepository propertyrepository;
     @Autowired
@@ -32,6 +34,7 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public List<PropertyDTO> getallproperties() {
         System.out.println("This is inside Service"+Dummy);
+        System.out.println("This is inside Service + DriverName"+DriverName);
         List<PropertyEntity> listofallproperties= (List<PropertyEntity>) propertyrepository.findAll();
         List<PropertyDTO>Proplist=new ArrayList<>();
         for(PropertyEntity pe: listofallproperties)
