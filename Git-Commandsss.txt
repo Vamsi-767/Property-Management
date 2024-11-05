@@ -1,5 +1,5 @@
 1. git init
 2. git add .
 3. git commit -m "any message"
-4.git remote add origin https://github.com/Vamsi-767/Property-Management.git
-5.git push --set-upstream origin master
+4.git remote add origin ##https://github.com/Vamsi-767/Property-Management.git##
+5.git push ##--set-upstream origin master##
