@@ -1,5 +1,7 @@
 package com.mycompany.property_management.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -12,6 +14,7 @@ import java.util.List;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
+    private final Logger logger= LoggerFactory.getLogger(this.getClass());
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<ErrorModel>> handlefieldvalidation(MethodArgumentNotValidException manv)
     {
@@ -20,6 +23,8 @@ public class CustomExceptionHandler {
         List<FieldError> fieldErrorList=manv.getBindingResult().getFieldErrors();
         for(FieldError fe:fieldErrorList)
         {
+            logger.debug("Inside field Validation: {} - {}",fe.getField(),fe.getDefaultMessage());
+            logger.info("Inside field Validation: {} - {}",fe.getField(),fe.getDefaultMessage());
             errorModel =new ErrorModel();
             errorModel.setCode(fe.getField());
             errorModel.setMessage((fe.getDefaultMessage()));
@@ -31,7 +36,15 @@ public class CustomExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<List<ErrorModel>> handleBusinessException(BusinessException bex)
     {
-        System.out.println("Business Exception is thrown");
+        for(ErrorModel em: bex.getErrors())
+        {
+            logger.debug("Business Exception thrown-Level-debug: {} - {}",em.getCode(),em.getMessage());
+            logger.info("Business Exception thrown-Level-info: {} - {}",em.getCode(),em.getMessage());
+            logger.warn("Business Exception thrown-Level-warn: {} - {}",em.getCode(),em.getMessage());
+            logger.error("Business Exception thrown-Level-error: {} - {}",em.getCode(),em.getMessage());
+
+        }
+
         return new ResponseEntity<List<ErrorModel>>(bex.getErrors(),HttpStatus.BAD_REQUEST);
     }
 }
