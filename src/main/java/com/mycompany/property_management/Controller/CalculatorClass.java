@@ -2,7 +2,6 @@ package com.mycompany.property_management.Controller;
 
 import com.mycompany.property_management.DTO.CalculatorDTO;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

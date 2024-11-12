@@ -5,7 +5,6 @@ import com.mycompany.property_management.Service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +28,7 @@ public class PropertyController {
     @PostMapping("/properties")
     public ResponseEntity saveproperty(@RequestBody PropertyDTO propertyDTO)
     {
-        propertyDTO=propertyService.saveProperty(propertyDTO);
+        propertyDTO=propertyService.saveproperty(propertyDTO);
         ResponseEntity<PropertyDTO> responseEntity=new ResponseEntity<>(propertyDTO, HttpStatus.CREATED);
         return responseEntity;
     }
@@ -41,6 +40,14 @@ public class PropertyController {
         ResponseEntity<List<PropertyDTO>> responseEntity=new ResponseEntity<>(propertyList,HttpStatus.OK);
         return responseEntity;
     }
+    @GetMapping("/properties/users/{userid}")
+    public ResponseEntity<List<PropertyDTO>> getallpropertiesByUser(@PathVariable("userid") Long userid)
+    {
+        List<PropertyDTO> propertyList=propertyService.getallpropertiesByUser(userid);
+        ResponseEntity<List<PropertyDTO>> responseEntity=new ResponseEntity<>(propertyList,HttpStatus.OK);
+        return responseEntity;
+    }
+
     @PutMapping("/properties/{propertyid}")
     public ResponseEntity<PropertyDTO> updateProperty(@RequestBody PropertyDTO propertyDTO,@PathVariable Long propertyid) {
         propertyDTO = propertyService.updateProperty(propertyDTO,propertyid);

@@ -10,10 +10,10 @@ public class PropertyDTO {
     private Long id;
     private String title;
     private String description;
-    private String ownerName;
-    private String ownerEmail;
     private Double price;
-    private String  address;
+    private String address;
+    private Long userid;
+
 
    //One way to define the variables using Getters/Setters but now I will be using Lambok
    /* public String getTitle() {

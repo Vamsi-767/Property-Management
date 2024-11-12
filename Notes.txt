@@ -1,0 +1,8 @@
+http://localhost:8080/actuator
+http://localhost:8080/actuator/health
+http://localhost:8080/swagger-ui/index.html
+http://localhost/phpmyadmin/index.php?route=/database/structure&db=pmsdb-dev
+
+for *->one relationship, default Fetchtype is EAGER While getting parent entity data it also bgets child entity data which is not helpful
+in terms of storage( example if i need to get user id in this case it gets all the info related to user) *-> one or many
+for *->many relationship,  Fetchtype is LAZY

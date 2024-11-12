@@ -1,8 +1,10 @@
 package com.mycompany.property_management.Service.Impl;
 
 import com.mycompany.property_management.Converter.UserConverter;
+import com.mycompany.property_management.DTO.Entity.AddressEntity;
 import com.mycompany.property_management.DTO.Entity.UserEntity;
 import com.mycompany.property_management.DTO.UserDTO;
+import com.mycompany.property_management.Repository.AddressRepository;
 import com.mycompany.property_management.Repository.UserRepository;
 import com.mycompany.property_management.Service.UserService;
 import com.mycompany.property_management.exception.BusinessException;
@@ -20,6 +22,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private UserConverter userConverter;
+    @Autowired
+    private AddressRepository addressRepository;
     @Override
     public UserDTO register(UserDTO userDTO) {
         Optional<UserEntity> oue=userRepository.findByOwnerEmail(userDTO.getOwnerEmail());
@@ -33,8 +37,16 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(errorModelList);
 
         }
+
         UserEntity userEntity=userConverter.convertDTOtoEntity(userDTO);
         userEntity=userRepository.save(userEntity);
+        AddressEntity addressEntity=new AddressEntity();
+        addressEntity.setStreetname(userDTO.getStreetname());
+        addressEntity.setAptno(userDTO.getAptno());
+        addressEntity.setCity(userDTO.getCity());
+        addressEntity.setCountry(userDTO.getCountry());
+        addressEntity.setUserEntity(userEntity);
+        addressRepository.save(addressEntity);
         userDTO=userConverter.convertEntitytoDTO(userEntity);
         return userDTO;
     }
@@ -58,5 +70,10 @@ public class UserServiceImpl implements UserService {
         }
 
         return userDTO;
+    }
+
+    @Override
+    public void deleteUser(Long userid) {
+        userRepository.deleteById(userid);
     }
 }
