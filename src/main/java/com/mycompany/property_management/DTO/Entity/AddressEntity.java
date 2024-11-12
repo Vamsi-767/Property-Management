@@ -9,17 +9,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name ="PROPERTY_TABLE")
-public class PropertyEntity {
+@Table(name ="ADDRESS_TABLE")
+public class AddressEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name = "PROPERTY_TITLE",nullable = false,length = 200)
-    private String title;
-    private String description;
-    private Double price;
-    private String  address;
-    @ManyToOne(fetch = FetchType.LAZY)//It will not fetch user data will only fetch property ; if User info also req the use Eager
+    private String Streetname;
+    private Long Aptno;
+    private String city;
+    private String Country;
+
+
+    @OneToOne
     @JoinColumn(name = "USER_ID",nullable = false)
     private UserEntity userEntity;
+
 }

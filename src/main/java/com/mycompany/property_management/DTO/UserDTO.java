@@ -25,5 +25,9 @@ public class UserDTO {
     @NotEmpty(message="This field cannot be empty")
     @Size(min = 1,max = 14,message = "Length of the password should be between 1 to 14 characters")
     private String password;
+    private String streetname;
+    private Long aptno;
+    private String city;
+    private String country;
 }
 

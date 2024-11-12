@@ -2,9 +2,13 @@ package com.mycompany.property_management.Service.Impl;
 
 import com.mycompany.property_management.Converter.PropertyConverter;
 import com.mycompany.property_management.DTO.Entity.PropertyEntity;
+import com.mycompany.property_management.DTO.Entity.UserEntity;
 import com.mycompany.property_management.DTO.PropertyDTO;
 import com.mycompany.property_management.Repository.PropertyRepository;
+import com.mycompany.property_management.Repository.UserRepository;
 import com.mycompany.property_management.Service.PropertyService;
+import com.mycompany.property_management.exception.BusinessException;
+import com.mycompany.property_management.exception.ErrorModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,11 +27,26 @@ public class PropertyServiceImpl implements PropertyService {
     private PropertyRepository propertyrepository;
     @Autowired
     private PropertyConverter propertyConverter;
+    @Autowired
+    private UserRepository userRepository;
     @Override
-    public PropertyDTO saveProperty(PropertyDTO propertyDTO) {
-        PropertyEntity pe=propertyConverter.convertDTOtoEntity(propertyDTO);
-        pe=propertyrepository.save(pe);
-        propertyDTO=propertyConverter.convertEntitytoDTO(pe);
+    public PropertyDTO saveproperty(PropertyDTO propertyDTO) {
+        Optional<UserEntity> opue= userRepository.findById(propertyDTO.getUserid());
+        if (opue.isPresent()) {
+            PropertyEntity pe = propertyConverter.convertDTOtoEntity(propertyDTO);
+            pe.setUserEntity(opue.get());
+            pe = propertyrepository.save(pe);
+            propertyDTO = propertyConverter.convertEntitytoDTO(pe);
+
+        }
+        else {
+            List<ErrorModel> errorModelList=new ArrayList<>();
+            ErrorModel errorModel=new ErrorModel();
+            errorModel.setCode("USER_NOT_FOUND");
+            errorModel.setMessage("User doesn't exists");
+            errorModelList.add(errorModel);
+            throw new BusinessException(errorModelList);
+        }
         return propertyDTO;
     }
 
@@ -44,6 +63,21 @@ public class PropertyServiceImpl implements PropertyService {
         }
         return Proplist;
     }
+
+    @Override
+    public List<PropertyDTO> getallpropertiesByUser(Long userid) {
+
+        List<PropertyEntity> listofallpropertiesuser= (List<PropertyEntity>) propertyrepository.findAllByUserEntityId(userid);
+        List<PropertyDTO>Proplist=new ArrayList<>();
+        for(PropertyEntity pe: listofallpropertiesuser)
+        {
+            PropertyDTO dto=propertyConverter.convertEntitytoDTO(pe);
+            Proplist.add(dto);
+        }
+        return Proplist;
+    }
+
+
 
     @Override
     public PropertyDTO updateProperty(PropertyDTO propertyDTO, Long propertyid) {
